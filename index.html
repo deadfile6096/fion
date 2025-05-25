@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic FION Hub</title>
+    <link rel="icon" href="img/logo.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <div id="game-container" class="min-h-screen flex flex-col">
+        <!-- Header with game title and player info -->
+        <header class="p-4 bg-gray-900 border-b-2 border-purple-700 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-purple-400">Galactic FION Hub</h1>
+            <div class="flex items-center">
+                <div id="player-info" class="hidden flex items-center mr-4">
+                    <div class="h-8 w-8 mr-2 rounded-full overflow-hidden bg-gradient-to-r from-purple-900 to-indigo-800">
+                        <img id="player-avatar" src="img/avatars/avatars_1.png" alt="Player Avatar" class="h-full w-full object-contain">
+                    </div>
+                    <span id="player-name" class="text-sm md:text-base">Player</span>
+                </div>
+                <div id="fion-balance" class="bg-purple-900 px-3 py-1 rounded-full flex items-center">
+                    <span class="text-yellow-400 font-bold mr-1">$FION:</span>
+                    <span id="balance" class="text-yellow-400 font-bold">100</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main game area -->
+        <main class="flex-grow flex flex-col md:flex-row">
+            <!-- Navigation tabs -->
+            <nav class="bg-gray-900 p-2 md:w-64 md:min-h-full">
+                <ul class="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2 overflow-x-auto md:overflow-x-visible">
+                    <li>
+                        <button data-tab="goods" class="tab-button active w-full text-left px-4 py-2 rounded bg-purple-800 text-white hover:bg-purple-700 transition-colors">Galactrade</button>
+                    </li>
+                    <li>
+                        <button data-tab="customs" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Planetary Customs</button>
+                    </li>
+                    <li>
+                        <button data-tab="buildings" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Buildings</button>
+                    </li>
+                    <li>
+                        <button data-tab="create-goods" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Create Goods</button>
+                    </li>
+                    <li>
+                        <button data-tab="create-character" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Create Character</button>
+                    </li>
+                    <li>
+                        <button data-tab="whitepaper" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Whitepaper</button>
+                    </li>
+                    <li>
+                        <button data-tab="leaderboard" class="tab-button w-full text-left px-4 py-2 rounded bg-gray-800 text-white hover:bg-purple-700 transition-colors">Capitalism Board</button>
+                    </li>
+                    <li>
+                        <button id="sell-planet-btn" class="w-full text-left px-4 py-2 rounded bg-red-700 text-white hover:bg-red-600 transition-colors">SELL PLANET</button>
+                    </li>
+                </ul>
+                <div class="mt-4 hidden md:block">
+                    <div class="bg-gray-800 p-2 rounded">
+                        <h3 class="text-sm font-bold mb-2 text-purple-400">Planet Stats</h3>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Level:</span>
+                            <span id="planet-level">1</span>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Traders:</span>
+                            <span id="trader-count">0</span>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Buildings:</span>
+                            <span id="building-count">0</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Capitalism Points:</span>
+                            <span id="capitalism-points">0</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Content area for tabs -->
+            <section class="flex-grow p-4 bg-gray-950 overflow-y-auto">
+                <!-- Goods Tab (Galactrade) -->
+                <div id="goods-tab" class="tab-content active">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Galactrade Market</h2>
+                    <p class="mb-4">Your trading hub for intergalactic goods. Manage your inventory and see what your traders are selling.</p>
+                    
+                    <div id="goods-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Goods cards will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Planetary Customs Tab -->
+                <div id="customs-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Planetary Customs</h2>
+                    <p class="mb-4">Alien traders arrive every 5 seconds. Hire them to boost your trading empire!</p>
+                    
+                    <div id="traders-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Trader cards will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Buildings Tab -->
+                <div id="buildings-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Buildings</h2>
+                    <p class="mb-4">Construct and upgrade buildings to enhance your trading capabilities.</p>
+                    
+                    <div id="buildings-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Building cards will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Create Goods Tab -->
+                <div id="create-goods-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Create Goods</h2>
+                    <p class="mb-4">Design your own unique goods to trade across the galaxy.</p>
+                    
+                    <form id="create-goods-form" class="bg-gray-800 p-4 rounded-lg">
+                        <div class="mb-4">
+                            <label for="good-name" class="block text-sm font-medium mb-1">Good Name</label>
+                            <input type="text" id="good-name" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Good Image</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <div class="image-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500 active">
+                                    <div class="bg-gradient-to-br from-indigo-900 to-purple-800 p-2 rounded">
+                                        <img src="img/goods/goods_1.png" alt="Good 1" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="image-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-indigo-900 to-purple-800 p-2 rounded">
+                                        <img src="img/goods/goods_2.png" alt="Good 2" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="image-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-indigo-900 to-purple-800 p-2 rounded">
+                                        <img src="img/goods/goods_3.png" alt="Good 3" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="image-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-indigo-900 to-purple-800 p-2 rounded">
+                                        <img src="img/goods/goods_4.png" alt="Good 4" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="good-description" class="block text-sm font-medium mb-1">Description</label>
+                            <textarea id="good-description" rows="3" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="good-price" class="block text-sm font-medium mb-1">Price ($FION)</label>
+                            <input type="number" id="good-price" min="1" value="10" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Create Good (Costs 50 $FION)
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Create Character Tab -->
+                <div id="create-character-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Create Character</h2>
+                    <p class="mb-4">Choose your trading persona and begin your galactic business journey.</p>
+                    
+                    <form id="create-character-form" class="bg-gray-800 p-4 rounded-lg">
+                        <div class="mb-4">
+                            <label for="character-name" class="block text-sm font-medium mb-1">Trader Name</label>
+                            <input type="text" id="character-name" class="w-full px-3 py-2 bg-gray-700 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Avatar</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <div class="avatar-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500 active">
+                                    <div class="bg-gradient-to-br from-purple-900 to-indigo-800 p-2 rounded">
+                                        <img src="img/avatars/avatars_1.png" alt="Avatar 1" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="avatar-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-purple-900 to-indigo-800 p-2 rounded">
+                                        <img src="img/avatars/avatars_2.png" alt="Avatar 2" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="avatar-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-purple-900 to-indigo-800 p-2 rounded">
+                                        <img src="img/avatars/avatars_3.png" alt="Avatar 3" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                                <div class="avatar-option cursor-pointer p-2 border border-gray-600 rounded hover:border-purple-500">
+                                    <div class="bg-gradient-to-br from-purple-900 to-indigo-800 p-2 rounded">
+                                        <img src="img/avatars/avatars_4.png" alt="Avatar 4" class="w-full h-24 object-contain">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Start Trading
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Whitepaper Tab -->
+                <div id="whitepaper-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Galactic FION Hub Whitepaper</h2>
+                    
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <h3 class="text-lg font-bold mb-2 text-yellow-400">Welcome to the Frontier!</h3>
+                        <p class="mb-4">Galactic FION Hub is an economic simulation where you manage your own trading planet in a distant galaxy.</p>
+                        
+                        <h3 class="text-lg font-bold mb-2 text-yellow-400">How to Play</h3>
+                        <ul class="list-disc pl-5 mb-4 space-y-2">
+                            <li>Create your character to begin your journey</li>
+                            <li>Hire alien traders from the Planetary Customs</li>
+                            <li>Build structures to improve your planet's capabilities</li>
+                            <li>Create and trade goods to earn $FION</li>
+                            <li>Climb the Capitalism Board to become the greatest trader in the galaxy</li>
+                        </ul>
+                        
+                        <h3 class="text-lg font-bold mb-2 text-yellow-400">Game Elements</h3>
+                        <h4 class="font-bold mb-1 text-purple-300">Traders</h4>
+                        <p class="mb-2">Each trader has unique skills: Trading, Persuasion, Delivery Speed, and more. Rare traders (with glowing backgrounds) produce twice the $FION!</p>
+                        
+                        <h4 class="font-bold mb-1 text-purple-300">Buildings</h4>
+                        <p class="mb-2">Buildings provide various bonuses:</p>
+                        <ul class="list-disc pl-5 mb-2">
+                            <li>Spaceport: Increases trader arrival frequency</li>
+                            <li>Alien Hotel: Improves chance of rare traders</li>
+                            <li>Gravimolecule Factory: Speeds up goods production</li>
+                            <li>Magnetic Market: Increases demand for goods</li>
+                        </ul>
+                        
+                        <h4 class="font-bold mb-1 text-purple-300">Goods</h4>
+                        <p class="mb-2">Goods are produced by your traders over time. Each good has a production level that determines how quickly it's created.</p>
+                        
+                        <h3 class="text-lg font-bold mb-2 text-yellow-400">Planet Levels</h3>
+                        <p class="mb-2">Your planet levels up as you achieve milestones:</p>
+                        <ul class="list-disc pl-5 mb-4">
+                            <li>Level 2: Hire 5 traders and build 2 structures</li>
+                            <li>Level 3: Hire 10 traders and build 5 structures</li>
+                            <li>Level 4: Hire 20 traders and build 10 structures</li>
+                            <li>Level 5: Hire 30 traders and build 15 structures</li>
+                        </ul>
+                        
+                        <p class="text-sm italic">Remember: The galaxy is vast and full of opportunity. Trade wisely!</p>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Tab -->
+                <div id="leaderboard-tab" class="tab-content hidden">
+                    <h2 class="text-xl font-bold mb-4 text-purple-400">Capitalism Board</h2>
+                    <p class="mb-4">The most successful trading planets in the galaxy. Can you reach the top?</p>
+                    
+                    <div class="bg-gray-800 p-4 rounded-lg">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="text-left py-2">Rank</th>
+                                    <th class="text-left py-2">Planet</th>
+                                    <th class="text-left py-2">Level</th>
+                                    <th class="text-right py-2">Capitalism Points</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Leaderboard entries will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button id="share-twitter" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded transition-colors flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                            Share on X
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+        <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50">
+            <div id="modal-content" class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 id="modal-title" class="text-xl font-bold mb-4 text-purple-400">Modal Title</h3>
+                <p id="modal-text" class="mb-4">Modal content goes here.</p>
+                <div class="flex justify-end">
+                    <button id="modal-close" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terms of Service Modal -->
+        <div id="tos-modal-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+            <div id="tos-modal-content" class="bg-gray-800 border-2 border-purple-500 rounded-lg p-6 max-w-lg w-full mx-4 animate-pulse-slow">
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-bold text-yellow-400 mb-2">INTERGALACTIC AGREEMENT</h3>
+                    <p class="text-purple-300 text-sm">TOP SECRET - CLASSIFIED - EYES ONLY</p>
+                </div>
+                
+                <div class="bg-gray-900 p-4 rounded mb-4 max-h-60 overflow-y-auto text-sm">
+                    <p class="mb-2">By clicking "I ACCEPT" below, you, a carbon-based lifeform of questionable intelligence, hereby agree to the following terms:</p>
+                    
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li>You acknowledge that $FION is not a real currency and cannot be exchanged for Earth money, Martian credits, or Betelgeusian snail pellets.</li>
+                        
+                        <li>Any aliens hired in this simulation are not actual sentient beings and no rights are being violated (as far as we know).</li>
+                        
+                        <li>The Galactic Federation of Trade Planets (GFTP) is not responsible for any space-time anomalies, interdimensional rifts, or existential crises that may occur while playing.</li>
+                        
+                        <li>Your planet may be randomly selected for "inspection" by our automated defense systems. This is normal and not at all suspicious.</li>
+                        
+                        <li>By accepting this agreement, you forfeit your right to complain about the game's economy being "unrealistic" when you can literally sell "Quantum Crystals" for profit.</li>
+                        
+                        <li>You agree to have fun or else face the consequences (consequences may include additional fun).</li>
+                        
+                        <li>The red "SELL PLANET" button is for entertainment purposes only. We are not actually buying your planet. Yet.</li>
+                        
+                        <li>Any resemblance to actual galactic trading empires, living or extinct, is purely coincidental and definitely not because we're secretly documenting Earth's potential for interstellar commerce.</li>
+                    </ol>
+                    
+                    <p class="mt-4 text-yellow-400">WARNING: Side effects of playing Galactic FION Hub may include delusions of grandeur, an unhealthy obsession with pixel art, and the sudden urge to negotiate with your household appliances.</p>
+                </div>
+                
+                <div class="text-center">
+                    <button id="tos-accept" class="bg-green-700 hover:bg-green-600 text-white font-bold py-3 px-8 rounded transition-colors">
+                        I ACCEPT THESE RIDICULOUS TERMS
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio elements -->
+        <audio id="background-music" loop>
+            <source src="audio/placeholder-music.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="success-sound">
+            <source src="audio/placeholder-success.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="error-sound">
+            <source src="audio/placeholder-error.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="touch-sound">
+            <source src="audio/placeholder-touch.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
